@@ -52,7 +52,11 @@ class RecursiveSearch:
     @return bool
     """
 
-    def initSearch(self, x, y):
+    def initSearch(self, x: int, y: int):
+
+        # If the recursion algorithm has reached the end, log the entire path, the path's length,
+        # and the ending coordinates. Then, set the resolution data to this and return True for
+        # the algorithm to stop.
 
         if self.maze[x][y] == "E":
             print(f'[DEBUG] End found at {(x, y)}.')
@@ -64,15 +68,28 @@ class RecursiveSearch:
                 "pathLength": len(self.path)
             })
             return True
+
+        # If a wall has been found, log it and return False so that the algorithm continues.
+
         elif self.maze[x][y] == 1:
             print(f'[DEBUG] Found wall at {(x, y)}.')
             return False
+
+        # Once it has visited a position, add the coordinates of that position to the path and log it.
+        # Return False so the algorithm can continue.
+
         elif self.maze[x][y] == "x":
             print(f'[DEBUG] Visited {(x, y)}')
             self.getCurrentPath().append((x, y))
             return False
 
+        # Mark the point as visited.
+
         self.maze[x][y] = "x"
+
+        # This check is an implementation of the recursion method.
+        # Check all points around a particular point (left, right, up, down).
+        # If a wall has been found, check the next one, and so on until the end has been found.
 
         if (
                 ((x < len(self.maze) - 1) and self.initSearch(x + 1, y))
@@ -82,16 +99,6 @@ class RecursiveSearch:
         ):
             return True
 
+        # Otherwise, the end has not been found. Return False.
+
         return False
-
-maze = [
-    [0, 0, 0, 0, 0, 1],
-    [1, 1, 0, 0, 0, 1],
-    [0, 0, 0, 1, 0, 0],
-    [0, 1, 1, 0, 0, 1],
-    [0, 1, 0, 0, 1, 0],
-    [0, 1, 0, 0, 0, "E"]
-]
-
-obj = RecursiveSearch(maze)
-print(obj.data)
